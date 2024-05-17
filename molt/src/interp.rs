@@ -727,7 +727,7 @@ impl Interp {
         // Populate the environment variable.
         // TODO: Really should be a "linked" variable, where sets to it are tracked and
         // written back to the environment.
-        interp.populate_env();
+        // interp.populate_env();
 
         interp
     }
