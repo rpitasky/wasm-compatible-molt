@@ -13,6 +13,14 @@ use crate::*;
 use std::fs;
 use std::time::Instant;
 
+#[cfg(web)]
+use wasm_bindgen::prelude::*;
+#[cfg(web)]
+extern "C" {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
+
 /// # append *varName* ?*value* ...?
 ///
 /// Appends one or more strings to a variable.
@@ -844,10 +852,27 @@ pub fn cmd_proc(interp: &mut Interp, _: ContextID, argv: &[Value]) -> MoltResult
 ///
 /// * Does not support `-nonewline`
 /// * Does not support `channelId`
+#[cfg(not(web))]
 pub fn cmd_puts(_interp: &mut Interp, _: ContextID, argv: &[Value]) -> MoltResult {
     check_args(1, argv, 2, 2, "string")?;
 
     println!("{}", argv[1]);
+    molt_ok!()
+}
+
+/// # puts *string*
+///
+/// Outputs the string to stdout.
+///
+/// ## TCL Liens
+///
+/// * Does not support `-nonewline`
+/// * Does not support `channelId`
+#[cfg(web)]
+pub fn cmd_puts(_interp: &mut Interp, _: ContextID, argv: &[Value]) -> MoltResult {
+    check_args(1, argv, 2, 2, "string")?;
+
+    log(argv[1].as_str());
     molt_ok!()
 }
 

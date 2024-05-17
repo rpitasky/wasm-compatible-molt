@@ -12,3 +12,7 @@ keywords = ["language", "script", "scripting", "tcl"]
 
 [dependencies]
 indexmap = "1.3.0"
+wasm-bindgen = { version = "0.2.92", optional = true }
+
+[features]
+web = ["dep:wasm-bindgen"]
