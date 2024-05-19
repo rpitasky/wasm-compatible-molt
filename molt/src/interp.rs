@@ -711,10 +711,6 @@ impl Interp {
         interp.add_command("unset", commands::cmd_unset);
         interp.add_command("while", commands::cmd_while);
 
-        // TODO: Requires file access.  Ultimately, might go in an extension crate if
-        // the necessary operations aren't available in core::.
-        interp.add_command("source", commands::cmd_source);
-
         // TODO: Useful for entire programs written in Molt; but not necessarily wanted in
         // extension scripts.
         interp.add_command("exit", commands::cmd_exit);
@@ -727,7 +723,13 @@ impl Interp {
         // Populate the environment variable.
         // TODO: Really should be a "linked" variable, where sets to it are tracked and
         // written back to the environment.
-        // interp.populate_env();
+        if !cfg!(web) {
+            interp.populate_env();
+
+            // TODO: Requires file access.  Ultimately, might go in an extension crate if
+            // the necessary operations aren't available in core::.
+            interp.add_command("source", commands::cmd_source);
+        }
 
         interp
     }
